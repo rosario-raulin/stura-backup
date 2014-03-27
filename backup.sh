@@ -11,7 +11,7 @@ declare -a DATABASES=("etherpad" "mail" "monatsreport" "ria" "roundcubemail" "wi
 
 log_error() {
   subject=$1
-  echo "" | mail -s ${subject} ${ROOT_MAIL}
+  echo ${subject}
   exit 1
 }
 
@@ -25,6 +25,8 @@ curr="$(date +'%m-%d-%Y')-$(uuidgen)"
 backup_dir="${BACKUP_ROOT}/${curr}"
 
 mkdir -p ${backup_dir}/www
+mkdir -p ${backup_dir}/mail
+mkdir -p ${backup_dir}/mysql
 
 if [ ! -d ${backup_dir} ]; then
   log_error "[Server Backup] Error creating backup dir"
@@ -52,14 +54,12 @@ done
 
 # last but not least: mail
 
-mkdir mail
 cp -r /home/vmail/mail/stura-md.de/* mail/
 
 if [ $? -ne 0 ] ; then
   log_error "[Server Backup] Saving mail failed"
 fi
 
-mkdir mysql
 tar cjf "${curr}.tar.bz2" www/ mail/ mysql/
 if [ $? -ne 0 ] ; then
   log_error "[Server Backup] 'tar'ing the backup failed"
