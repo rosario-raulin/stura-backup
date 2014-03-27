@@ -4,8 +4,8 @@ BACKUP_DIR="backup"
 ROOT_MAIL="rosario.raulin@stura-md.de"
 
 log_error() {
-  subject = $1
-  message = $2
+  subject=$1
+  message=$2
   echo ${message} | mail -s ${subject} ${ROOT_MAIL}
 }
 
