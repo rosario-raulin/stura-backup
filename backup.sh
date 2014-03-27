@@ -60,7 +60,7 @@ if [ $? -ne 0 ] ; then
   log_error "[Server Backup] Saving mail failed"
 fi
 
-tar cjf "${curr}.tar.bz2" www/ mail/ mysql/
+tar c www/ mail/ mysql/ | gzip --fast > ${curr}.tar.gz
 if [ $? -ne 0 ] ; then
   log_error "[Server Backup] 'tar'ing the backup failed"
 fi
