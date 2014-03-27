@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # configuration
 
@@ -22,9 +22,9 @@ cd /
 
 # there we create backup/MONTH-DAY-YEAR-$some-uuid to store everything
 curr="$(date +'%m-%d-%Y')-$(uuidgen)"
-backup_dir="${BACKUP_ROOT}/${curr}/www"
+backup_dir="${BACKUP_ROOT}/${curr}"
 
-mkdir -p ${backup_dir}
+mkdir -p ${backup_dir}/www
 
 if [ ! -d ${backup_dir} ]; then
   log_error "[Server Backup] Error creating backup dir"
@@ -59,6 +59,7 @@ if [ $? -ne 0 ] ; then
   log_error "[Server Backup] Saving mail failed"
 fi
 
+mkdir mysql
 tar cjf "${curr}.tar.bz2" www/ mail/ mysql/
 if [ $? -ne 0 ] ; then
   log_error "[Server Backup] 'tar'ing the backup failed"
