@@ -5,7 +5,7 @@
 BACKUP_ROOT="backup"
 ROOT_MAIL="rosario.raulin@stura-md.de"
 MYSQL_PASSWORD=""
-declare -a DATABASES=("etherpad" "mail" "monatsreport" "ria" "roundcubemail" "wiki" "wordpress")
+declare -a DATABASES=("etherpad" "mail" "monatsreport" "ria" "roundcubemail" "wiki" "wordpress" "wikiarguments")
 
 # helper functions
 
@@ -63,6 +63,11 @@ fi
 tar c www/ mail/ mysql/ | gzip --fast > ${curr}.tar.gz
 if [ $? -ne 0 ] ; then
   log_error "[Server Backup] 'tar'ing the backup failed"
+fi
+
+ruby toS3.rb -k key.pem -u ${curr}.tar.gz
+if [ $? -ne 0] ; then
+  log_error "[Server Backup] uploading to S3 failed"
 fi
 
 echo "success"
